@@ -15,10 +15,33 @@
     </header>
     <main class="main">
         <section class="side-controls">
+            <div class="side-controls__form-wrap">
+                <ul class="side-controls__switch-form">
+                    <li class="side-controls__switch-item">
+                        <button class="side-controls__btn-upload btn btn--active">Write book</button>
+                    </li>
+                    <li class="side-controls__switch-item">
+                        <button class="side-controls__btn-write btn">Upload book</button>
+                    </li>
+                </ul>
+                <form action="#" class="form side-conrols__form" id="write-form">
+                    <label class="form__label" for="title">Book title:</label>
+                    <input type="text" name="title" id="title">
+                </form>
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+                <form action="#" class="form side-conrols__form side-controls__form--active" id="upload-form">
+                    <label class="form__label" for="title">Book title:</label>
+                    <input type="text" name="title" id="title">
+                    <label for="file" class="form__file-label btn">Upload...</label>
+                    <input type="file" name="book-file" id="file" class="form__file-upload">
+                </form>
+            </div>
+            <form>
 
+            </form>
         </section>
         <section class="book-content">
-            
+
         </section>
     </main>
 </body>
