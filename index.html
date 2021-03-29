@@ -28,17 +28,17 @@
                     </ul>
                     <div class="side-controls__form-wrap side-controls__form-wrap--active">
                         <form action="#" class="form side-conrols__form" id="write-form">
-                            <label class="form__label" for="title">Book title:</label>
-                            <input type="text" name="title" id="title" class="form__input">
+                            <label class="form__label" for="w-title">Book title:</label>
+                            <input type="text" name="title" id="w-title" class="form__input" required>
                         </form>
-                        <textarea name="form__book-text" id="text" cols="25" rows="10" placeholder="Text..." class="form__book-text"></textarea>
+                        <textarea name="form__book-text" id="text" cols="50" rows="10" placeholder="Text..." class="form__book-text" required></textarea>
                     </div>
-                    <div class="side-controls__form-wrap  side-controls__form-wrap--active">
+                    <div class="side-controls__form-wrap">
                         <form action="#" class="form side-conrols__form" id="upload-form">
-                            <label for="title" class="form__label">Book title:</label>
-                            <input type="text" name="title" id="title" class="form__input">
+                            <label for="up-title" class="form__label">Book title:</label>
+                            <input type="text" name="title" id="up-title" class="form__input" required>
                             <label for="file" class="form__file-label btn">Upload...</label>
-                            <input type="file" name="book-file" id="file" class="form__file-upload">
+                            <input type="file" name="book-file" id="file" class="form__file-upload" required>
                         </form>
                     </div>
                 </div>
@@ -46,5 +46,6 @@
         </section>
         <section class="book-content"></section>
     </main>
+    <script src="./scripts/app.js"></script>
 </body>
 </html>
