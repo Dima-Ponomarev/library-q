@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <title>Library | Read Share Store</title>
 </head>
@@ -15,34 +16,35 @@
     </header>
     <main class="main">
         <section class="side-controls">
-            <div class="side-controls__form-wrap">
-                <ul class="side-controls__switch-form">
-                    <li class="side-controls__switch-item">
-                        <button class="side-controls__btn-upload btn btn--active">Write book</button>
-                    </li>
-                    <li class="side-controls__switch-item">
-                        <button class="side-controls__btn-write btn">Upload book</button>
-                    </li>
-                </ul>
-                <form action="#" class="form side-conrols__form" id="write-form">
-                    <label class="form__label" for="title">Book title:</label>
-                    <input type="text" name="title" id="title">
-                </form>
-                <textarea name="" id="" cols="30" rows="10"></textarea>
-                <form action="#" class="form side-conrols__form side-controls__form--active" id="upload-form">
-                    <label class="form__label" for="title">Book title:</label>
-                    <input type="text" name="title" id="title">
-                    <label for="file" class="form__file-label btn">Upload...</label>
-                    <input type="file" name="book-file" id="file" class="form__file-upload">
-                </form>
+            <div class="side-controls__inner">
+                <div class="side-controls__forms-wrap">
+                    <ul class="side-controls__switch-forms">
+                        <li class="side-controls__switch-item">
+                            <button class="side-controls__btn-write btn btn--active">Write book</button>
+                        </li>
+                        <li class="side-controls__switch-item">
+                            <button class="side-controls__btn-upload btn">Upload book</button>
+                        </li>
+                    </ul>
+                    <div class="side-controls__form-wrap side-controls__form-wrap--active">
+                        <form action="#" class="form side-conrols__form" id="write-form">
+                            <label class="form__label" for="title">Book title:</label>
+                            <input type="text" name="title" id="title" class="form__input">
+                        </form>
+                        <textarea name="form__book-text" id="text" cols="25" rows="10" placeholder="Text..." class="form__book-text"></textarea>
+                    </div>
+                    <div class="side-controls__form-wrap  side-controls__form-wrap--active">
+                        <form action="#" class="form side-conrols__form" id="upload-form">
+                            <label for="title" class="form__label">Book title:</label>
+                            <input type="text" name="title" id="title" class="form__input">
+                            <label for="file" class="form__file-label btn">Upload...</label>
+                            <input type="file" name="book-file" id="file" class="form__file-upload">
+                        </form>
+                    </div>
+                </div>
             </div>
-            <form>
-
-            </form>
         </section>
-        <section class="book-content">
-
-        </section>
+        <section class="book-content"></section>
     </main>
 </body>
 </html>

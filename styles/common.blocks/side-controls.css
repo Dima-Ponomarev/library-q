@@ -1,0 +1,34 @@
+.side-controls{
+    width: 25vw;
+    overflow-y: scroll;
+    border-right: 2px solid black;
+}
+
+.side-controls__inner{
+    padding: 2rem 2rem 0 2rem;
+}
+
+.side-controls__forms-wrap{
+    display: flex;
+    flex-direction: column;
+}
+
+.side-controls__switch-forms{
+    display: flex;
+
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.side-controls__btn-write{
+    margin-right: 1rem;
+}
+
+.side-controls__form-wrap{
+    display: none;
+}
+
+.side-controls__form-wrap--active{
+    display: flex;
+    flex-direction: column;
+}
