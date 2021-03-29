@@ -24,3 +24,7 @@
 
     resize: none;
 }
+
+.form__submit{
+    margin-top: 1.5rem;
+}

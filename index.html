@@ -17,6 +17,9 @@
     <main class="main">
         <section class="side-controls">
             <div class="side-controls__inner">
+                <div class="side-controls__books">
+
+                </div>
                 <div class="side-controls__forms-wrap">
                     <ul class="side-controls__switch-forms">
                         <li class="side-controls__switch-item">
@@ -27,18 +30,20 @@
                         </li>
                     </ul>
                     <div class="side-controls__form-wrap side-controls__form-wrap--active">
-                        <form action="#" class="form side-conrols__form" id="write-form">
+                        <form class="form side-conrols__form" id="write-form">
                             <label class="form__label" for="w-title">Book title:</label>
                             <input type="text" name="title" id="w-title" class="form__input" required>
                         </form>
-                        <textarea name="form__book-text" id="text" cols="50" rows="10" placeholder="Text..." class="form__book-text" required></textarea>
+                        <textarea name="book-text" id="text" cols="50" rows="10" placeholder="Text..." class="form__book-text" form="write-form" required></textarea>
+                        <button class="side-controls__add-written-book btn">Add new book!</button>
                     </div>
                     <div class="side-controls__form-wrap">
-                        <form action="#" class="form side-conrols__form" id="upload-form">
+                        <form class="form side-conrols__form" id="upload-form">
                             <label for="up-title" class="form__label">Book title:</label>
-                            <input type="text" name="title" id="up-title" class="form__input" required>
+                            <input type="text" name="login" id="up-title" class="form__input" required>
                             <label for="file" class="form__file-label btn">Upload...</label>
-                            <input type="file" name="book-file" id="file" class="form__file-upload" required>
+                            <input type="file" name="file" id="file" class="form__file-upload" required>
+                            <input type="submit" value="Add new book!" class="form__submit btn">
                         </form>
                     </div>
                 </div>
