@@ -26,5 +26,7 @@
 }
 
 .form__submit{
+    display: block;
     margin-top: 1.5rem;
+    width: 100%;
 }
