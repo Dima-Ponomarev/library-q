@@ -32,21 +32,60 @@ class Book{
         const listItem = document.createElement('li');
         listItem.className = `${root.className}__item book`;
         
+        //title wrap
+        const titleWrap = document.createElement('div');
+        titleWrap.className = 'book__title-wrap'
+        
+        //book title element
         const bookTitle = document.createElement('p');
         bookTitle.className = 'book__title'
         if (this.title.length >= 25){
-            bookTitle.innerText = this.title.substring(0, 25) + '...';
+            bookTitle.innerText = this.title.substring(0, 23) + '...';
         } else {
             bookTitle.innerText = this.title;
         }
-        listItem.appendChild(bookTitle);
 
-        root.appendChild(listItem)
+        //append title elements to title wrap
+        titleWrap.appendChild(bookTitle);
+
+        //controls wrap
+        const controlBtns = document.createElement('div');
+        controlBtns.className = 'book__btn-wrap';
+
+        //edit btn
+        const editBtn = document.createElement('button');
+        editBtn.className = 'book__edit-btn';
+
+
+        //delete btn
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'book__delete-btn';
+        deleteBtn.addEventListener('click', e =>{
+
+        })
+        
+        //append cntrol element to control panel
+        controlBtns.appendChild(editBtn);
+        controlBtns.appendChild(deleteBtn);
+
+
+        listItem.appendChild(titleWrap);
+        listItem.appendChild(controlBtns)
+
+        root.appendChild(listItem);
     }
 
 }
 
+const deleteBtnHandler = (e) => {
+    console.log(e);
+}
+
 //---------------LOCAL STORAGE HANDLING-----------------
+
+const deleteFromLocal = (index) => {
+    
+}
 
 const saveToLocal = (book) =>{
     let localBooks;
@@ -63,7 +102,7 @@ const getLocal = () => {
     const loadedBooks = [];
     if (localStorage.getItem('books') !== null){
         const bookObjects = JSON.parse(localStorage.getItem('books'));
-        bookObjects.forEach(obj =>{
+        bookObjects.forEach((obj) =>{
             loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList))
         })
     }

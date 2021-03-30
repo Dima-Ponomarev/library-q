@@ -3,15 +3,48 @@
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
     cursor: pointer;
-    transition: 0.2s ease;
+    border: 1px solid white;
 }
 
 .book__title{
     padding-left: 1rem;
 }
 
+.book__btn-wrap{
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.book__delete-btn,
+.book__edit-btn{
+    cursor: pointer;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    background-color: white;
+    border: none;
+
+}
+
+.book__delete-btn{
+    background: url(../../assets/icons/trash.png) no-repeat center;
+}
+
+.book__edit-btn{
+    background: url(../../assets/icons/edit.png) no-repeat center;
+}
+
+.book__delete-btn:hover,
+.book__edit-btn:hover{
+    background-color: #ddd;
+}
+
 .book:hover{
     border: 1px solid black;
-    transform: translateY(-5%);
 }
