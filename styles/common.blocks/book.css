@@ -48,3 +48,8 @@
 .book:hover{
     border: 1px solid black;
 }
+
+.book--active{
+    background: #73ab84;
+    color: white;
+}

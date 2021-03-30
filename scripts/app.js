@@ -71,7 +71,8 @@ class Book{
         const editBtn = document.createElement('button');
         editBtn.className = 'book__edit-btn';
         editBtn.addEventListener('click', e => {
-            renderEditPopup(e, this);
+            e.stopPropagation();
+            renderEditPopup(this);
         })
 
 
@@ -79,6 +80,7 @@ class Book{
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'book__delete-btn';
         deleteBtn.addEventListener('click', e =>{
+            e.stopPropagation();
         })
         
         //append cntrol element to control panel
@@ -89,6 +91,10 @@ class Book{
         listItem.appendChild(titleWrap);
         listItem.appendChild(controlBtns)
 
+        listItem.addEventListener('click', (e) => {
+            openNewBookHandler(this);
+        })
+
         root.appendChild(listItem);
     }
 
@@ -96,7 +102,7 @@ class Book{
 
 //---------------EDIT BOOK--------------------
 
-const renderEditPopup = (e, book) => {
+const renderEditPopup = (book) => {
     const popupElement = document.querySelector('.popup');
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup__container';
@@ -116,9 +122,6 @@ const renderEditPopup = (e, book) => {
     popupContainer.appendChild(saveBtn);
     popupElement.appendChild(popupContainer);
     popupElement.classList.add('popup--active');
-
-
-
 }
 
 const saveBtnHandler = (book) => {
@@ -138,8 +141,29 @@ const saveBtnHandler = (book) => {
     popupElement.classList.remove('popup--active')
 }
 
+//-----------------DELETE BOOK---------------------
+
 const deleteBtnHandler = (e) => {
     console.log(e);
+}
+
+//-----------------OPEN NEW BOOK--------------------
+
+const openNewBookHandler = (book) => {
+    const bookContent = document.querySelector('.book-content');
+
+    const bookTitle = document.createElement('h2');
+    bookTitle.className = 'book-content__title';
+    bookTitle.innerText = book.title;
+
+    const bookText = document.createElement('p');
+    bookText.className = 'book-content__text';
+    bookText.innerText = book.text;
+
+    bookContent.innerHTML = '';
+    bookContent.appendChild(bookTitle);
+    bookContent.appendChild(bookText);
+
 }
 
 //---------------LOCAL STORAGE HANDLING-----------------
@@ -238,6 +262,4 @@ uploadForm.addEventListener('submit', function (e){
 //Load books from local storage
 
 books = getLocal();
-
-console.log(books);
 

@@ -1,3 +1,17 @@
 .book-content{
-    
+    min-width: 75vw;
+    font-size: 2rem;
+
+    overflow-y: scroll;
+}
+
+.book-content__title{
+    text-align: center;
+    text-transform: capitalize;
+
+    padding: 1rem 0;
+}
+
+.book-content__text{
+    padding: 0 5rem;
 }
