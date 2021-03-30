@@ -9,8 +9,9 @@
     border: 1px solid white;
 }
 
-.book__title{
+.book__title-wrap{
     padding-left: 1rem;
+    overflow: hidden;
 }
 
 .book__btn-wrap{
@@ -20,7 +21,8 @@
 }
 
 .book__delete-btn,
-.book__edit-btn{
+.book__edit-btn,
+.book__status-btn{
     cursor: pointer;
 
     width: 40px;
@@ -40,9 +42,32 @@
     background: url(../../assets/icons/edit.png) no-repeat center;
 }
 
+.book__status-btn{
+    background: url(../../assets/icons/open-book.png) no-repeat center;
+}
+
+.book__status-btn:hover,
+.book__status-btn--read{
+    background: url(../../assets/icons/book-closed-with-black-cover.png) no-repeat center;
+}
+
+.book__status-btn--read:hover{
+    background: url(../../assets/icons/open-book.png) no-repeat center;
+}
+
 .book__delete-btn:hover,
-.book__edit-btn:hover{
+.book__edit-btn:hover,
+.book__status-btn:hover{
     background-color: #ddd;
+}
+
+.book__status{
+    font-size: 1.3rem;
+    color: rgb(143, 46, 46);
+}
+
+.book__status--read{
+    color: rgb(58, 151, 98);
 }
 
 .book:hover{
