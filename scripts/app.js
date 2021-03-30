@@ -103,6 +103,7 @@ class Book{
 //---------------EDIT BOOK--------------------
 
 const renderEditPopup = (book) => {
+    console.log(book)
     const popupElement = document.querySelector('.popup');
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup__container';
@@ -129,6 +130,7 @@ const saveBtnHandler = (book) => {
     const title = document.getElementById('p-title');
     const text = document.getElementById('p-text');
     book.setNewTitle(title.value);
+    console.log(title, text, book)
     books.forEach(item => {
         if (book === item){
             item.setNewTitle(title.value);
@@ -136,9 +138,8 @@ const saveBtnHandler = (book) => {
         }
     });
     updateLocal(books);
-    title.value = ''
-    text.value = ''
-    popupElement.classList.remove('popup--active')
+    popupElement.classList.remove('popup--active');
+    popupElement.innerHTML = '';
 }
 
 //-----------------DELETE BOOK---------------------
