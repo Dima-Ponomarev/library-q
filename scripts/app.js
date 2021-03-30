@@ -5,23 +5,48 @@ const formWrap = document.querySelectorAll('.side-controls__form-wrap');
 const writeForm = document.getElementById('write-form');
 const uploadForm = document.getElementById('upload-form');
 const writeBtn = document.querySelector('.side-controls__add-written-book')
+const mainList = document.querySelector('.main-list')
 let books = [];
 
 class Book{
-    constructor(title, text){
+    constructor(title, text, statusRead, mainRoot){
         this.title = title;
         this.text = text;
+        this.statusRead = statusRead;
+        this.renderToList(mainRoot);
     }
 
     toJSON(){
         return{
             title: this.title,
-            text: this.text
+            text: this.text,
+            statusRead: this.statusRead,
         }
     }
+
+    setStatusRead(bool){
+        this.statusRead = bool;
+    }
+
+    renderToList(root){
+        const listItem = document.createElement('li');
+        listItem.className = `${root.className}__item book`;
+        
+        const bookTitle = document.createElement('p');
+        bookTitle.className = 'book__title'
+        if (this.title.length >= 25){
+            bookTitle.innerText = this.title.substring(0, 25) + '...';
+        } else {
+            bookTitle.innerText = this.title;
+        }
+        listItem.appendChild(bookTitle);
+
+        root.appendChild(listItem)
+    }
+
 }
 
-//---------------LOCAL STORAGE HANLING-----------------
+//---------------LOCAL STORAGE HANDLING-----------------
 
 const saveToLocal = (book) =>{
     let localBooks;
@@ -39,7 +64,7 @@ const getLocal = () => {
     if (localStorage.getItem('books') !== null){
         const bookObjects = JSON.parse(localStorage.getItem('books'));
         bookObjects.forEach(obj =>{
-            loadedBooks.push(new Book(obj.title, obj.text))
+            loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList))
         })
     }
     return loadedBooks;
@@ -77,7 +102,7 @@ writeBtn.addEventListener('click', (e) => {
     e.preventDefault();
     const title = document.getElementById('w-title');
     const text = document.getElementById('text');
-    const newBook = new Book(title.value, text.value);
+    const newBook = new Book(title.value, text.value, false, mainList);
     books.push(newBook);
     saveToLocal(newBook);
     console.log(books);
@@ -97,7 +122,7 @@ uploadForm.addEventListener('submit', function (e){
     }).then(function(response) {
         return response.json();
     }).then(function (json) {
-        const newBook = new Book(title.value, json.text);
+        const newBook = new Book(title.value, json.text, false, mainList);
         books.push(newBook);
         saveToLocal(newBook);
         console.log(books);
@@ -115,3 +140,4 @@ uploadForm.addEventListener('submit', function (e){
 books = getLocal();
 
 console.log(books);
+
