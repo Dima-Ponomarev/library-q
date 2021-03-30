@@ -9,11 +9,13 @@ const mainList = document.querySelector('.main-list')
 let books = [];
 
 class Book{
-    constructor(title, text, statusRead, mainRoot){
+    constructor(title, text, statusRead, mainRoot, number){
         this.title = title;
         this.text = text;
         this.statusRead = statusRead;
+        this.number = number;
         this.renderToList(mainRoot);
+
     }
 
     toJSON(){
@@ -24,6 +26,18 @@ class Book{
         }
     }
 
+    setNewTitle(newTitle){
+        const renderedElementTitle = document.querySelector(`[data-number='${this.number}']`).childNodes[0].childNodes[0];
+        renderedElementTitle.innerText = newTitle;
+        this.title = newTitle;
+    }
+
+    setNewNumber(num){
+        const renderedElement = document.querySelector(`[data-number='${this.number}']`);
+        renderedElement.dataset.number = num;
+        this.number = num;
+    }
+
     setStatusRead(bool){
         this.statusRead = bool;
     }
@@ -31,6 +45,7 @@ class Book{
     renderToList(root){
         const listItem = document.createElement('li');
         listItem.className = `${root.className}__item book`;
+        listItem.dataset.number = this.number
         
         //title wrap
         const titleWrap = document.createElement('div');
@@ -55,13 +70,15 @@ class Book{
         //edit btn
         const editBtn = document.createElement('button');
         editBtn.className = 'book__edit-btn';
+        editBtn.addEventListener('click', e => {
+            renderEditPopup(e, this);
+        })
 
 
         //delete btn
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'book__delete-btn';
         deleteBtn.addEventListener('click', e =>{
-
         })
         
         //append cntrol element to control panel
@@ -77,14 +94,58 @@ class Book{
 
 }
 
+//---------------EDIT BOOK--------------------
+
+const renderEditPopup = (e, book) => {
+    const popupElement = document.querySelector('.popup');
+    const popupContainer = document.createElement('div');
+    popupContainer.className = 'popup__container';
+    popupContainer.innerHTML = 
+    `
+    <label class="popup__label" for="p-title">Book title:</label>
+    <input type="text" name="title" id="p-title" class="popup__title-input" value="${book.title}">
+    <textarea name="book-text" cols="50" rows="10" id="p-text" class="popup__book-text">${book.text}</textarea>
+    `
+    const saveBtn = document.createElement('button');
+    saveBtn.className =  'popup__save-btn btn';
+    saveBtn.innerText = 'Save';
+    saveBtn.addEventListener('click', e => {
+        saveBtnHandler(book)       
+    })
+
+    popupContainer.appendChild(saveBtn);
+    popupElement.appendChild(popupContainer);
+    popupElement.classList.add('popup--active');
+
+
+
+}
+
+const saveBtnHandler = (book) => {
+    const popupElement = document.querySelector('.popup');
+    const title = document.getElementById('p-title');
+    const text = document.getElementById('p-text');
+    book.setNewTitle(title.value);
+    books.forEach(item => {
+        if (book === item){
+            item.setNewTitle(title.value);
+            item.text = text.value
+        }
+    });
+    updateLocal(books);
+    title.value = ''
+    text.value = ''
+    popupElement.classList.remove('popup--active')
+}
+
 const deleteBtnHandler = (e) => {
     console.log(e);
 }
 
 //---------------LOCAL STORAGE HANDLING-----------------
 
-const deleteFromLocal = (index) => {
-    
+const updateLocal = (books) =>{
+    localStorage.setItem('books', JSON.stringify(books));
 }
 
 const saveToLocal = (book) =>{
@@ -102,8 +163,8 @@ const getLocal = () => {
     const loadedBooks = [];
     if (localStorage.getItem('books') !== null){
         const bookObjects = JSON.parse(localStorage.getItem('books'));
-        bookObjects.forEach((obj) =>{
-            loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList))
+        bookObjects.forEach((obj, index) =>{
+            loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList, index))
         })
     }
     return loadedBooks;
@@ -141,7 +202,7 @@ writeBtn.addEventListener('click', (e) => {
     e.preventDefault();
     const title = document.getElementById('w-title');
     const text = document.getElementById('text');
-    const newBook = new Book(title.value, text.value, false, mainList);
+    const newBook = new Book(title.value, text.value, false, mainList, books.length);
     books.push(newBook);
     saveToLocal(newBook);
     console.log(books);
@@ -161,7 +222,7 @@ uploadForm.addEventListener('submit', function (e){
     }).then(function(response) {
         return response.json();
     }).then(function (json) {
-        const newBook = new Book(title.value, json.text, false, mainList);
+        const newBook = new Book(title.value, json.text, false, mainList, books.length);
         books.push(newBook);
         saveToLocal(newBook);
         console.log(books);
