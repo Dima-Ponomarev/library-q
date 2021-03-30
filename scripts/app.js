@@ -81,6 +81,7 @@ class Book{
         deleteBtn.className = 'book__delete-btn';
         deleteBtn.addEventListener('click', e =>{
             e.stopPropagation();
+            deleteBookHandler(this);
         })
         
         //append cntrol element to control panel
@@ -103,7 +104,6 @@ class Book{
 //---------------EDIT BOOK--------------------
 
 const renderEditPopup = (book) => {
-    console.log(book)
     const popupElement = document.querySelector('.popup');
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup__container';
@@ -129,8 +129,7 @@ const saveBtnHandler = (book) => {
     const popupElement = document.querySelector('.popup');
     const title = document.getElementById('p-title');
     const text = document.getElementById('p-text');
-    book.setNewTitle(title.value);
-    console.log(title, text, book)
+    //find and update book values
     books.forEach(item => {
         if (book === item){
             item.setNewTitle(title.value);
@@ -144,8 +143,12 @@ const saveBtnHandler = (book) => {
 
 //-----------------DELETE BOOK---------------------
 
-const deleteBtnHandler = (e) => {
-    console.log(e);
+const deleteBookHandler = (book) => {
+    //delete from DOM
+    const deleteBookDOM = document.querySelector(`[data-number = "${book.number}"]`);
+    deleteBookDOM.remove();
+    books.splice(book.number, 1);
+    updateLocal(books);
 }
 
 //-----------------OPEN NEW BOOK--------------------
