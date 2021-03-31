@@ -6,6 +6,8 @@ const writeForm = document.getElementById('write-form');
 const uploadForm = document.getElementById('upload-form');
 const writeBtn = document.querySelector('.side-controls__add-written-book')
 const mainList = document.querySelector('.main-list')
+const sortMainStatusBtn = document.getElementById('sort-main-status');
+const sortMainTimeBtn = document.getElementById('sort-main-time');
 let books = [];
 
 class Book {
@@ -39,17 +41,20 @@ class Book {
     }
 
     toggleStatus() {
-        const renderedElementStatus = document.querySelector(`[data-number='${this.number}']`).childNodes[0].childNodes[1];
+        const renderedListElement = document.querySelector(`[data-number='${this.number}']`)
+        const renderedElementStatus = renderedListElement.childNodes[0].childNodes[1];
         const renderedElementStatusBtn = document.querySelector(`[data-number='${this.number}']`).childNodes[1].childNodes[0];
         if (this.statusRead) {
             renderedElementStatus.classList.remove('book__status--read');
             renderedElementStatus.innerText = 'Book is not read';
             renderedElementStatusBtn.classList.remove('book__status-btn--read');
+            renderedListElement.dataset.status = false
             this.statusRead = false;
         } else {
             renderedElementStatus.classList.add('book__status--read');
             renderedElementStatus.innerText = 'Book is read';
             renderedElementStatusBtn.classList.add('book__status-btn--read');
+            renderedListElement.dataset.status = true
             this.statusRead = true;
         }
     }
@@ -58,6 +63,7 @@ class Book {
         const listItem = document.createElement('li');
         listItem.className = `${root.className}__item book`;
         listItem.dataset.number = this.number
+        listItem.dataset.status = this.statusRead
 
         //title wrap
         const titleWrap = document.createElement('div');
@@ -129,7 +135,6 @@ class Book {
 
         root.appendChild(listItem);
     }
-
 }
 
 //---------------EDIT BOOK--------------------
@@ -214,6 +219,41 @@ const openNewBookHandler = (book) => {
 
 }
 
+//----------------SORT BOOK LIST HANDLERS-----------------------
+
+const sortStatusHandler = (bookList, list) => {
+    list.innerHTML = ''
+    const unreadList = [];
+    for (book of bookList){
+        if (book.statusRead === true){
+            book.renderToList(list);
+        } else {
+            unreadList.push(book);
+        }
+    }
+    for (book of unreadList){
+        book.renderToList(list)
+    }
+
+}
+
+const sortTimeHandler =  (bookList, list) => {
+    list.innerHTML = ''
+    let sortedBooks = bookList;
+    for (let i = 0; i < sortedBooks.length; i++){
+        for (let j = i + 1; j < sortedBooks.length; j++){
+            if (sortedBooks[i].number > sortedBooks[j].number){
+                const temp = sortedBooks[i];
+                sortedBooks[i] = sortedBooks[j];
+                sortedBooks[j] = temp;
+            }
+        }
+    }
+    for (book of sortedBooks){
+        book.renderToList(list)
+    }
+}
+
 //---------------LOCAL STORAGE HANDLING-----------------
 
 const updateLocal = (books) => {
@@ -244,7 +284,7 @@ const getLocal = () => {
 
 //--------------------------------------------------------
 
-//---------------------SWITCH BETWEEN 2 FORMS--------------------------
+//---------------------SWITCH BETWEEN 2 FORMS HANDLERS--------------------------
 
 const uploadSwitchHandler = (e) => {
     if (!e.target.classList.contains('btn--active')) {
@@ -267,6 +307,10 @@ uploadSwitchBtn.addEventListener('click', uploadSwitchHandler);
 writeSwitchBtn.addEventListener('click', writeSwitchHandler);
 
 //------------------------------------------------------------
+
+//----------------------SORT EVENTS----------------------------
+sortMainStatusBtn.addEventListener('click', () => sortStatusHandler(books, mainList));
+sortMainTimeBtn.addEventListener('click', () => sortTimeHandler(books, mainList));
 
 //-------------------ADD NEW BOOK-----------------------------
 
