@@ -98,6 +98,9 @@ class Book {
         //toggle book status btn
         const statusBtn = document.createElement('button');
         statusBtn.className = 'book__status-btn';
+        if (this.statusRead) {
+            statusBtn.classList.add('book__status-btn--read')
+        }
         statusBtn.addEventListener('click', e => {
             e.stopPropagation();
             toggleStatusHandler(this);
