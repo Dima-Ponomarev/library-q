@@ -22,7 +22,8 @@
 
 .book__delete-btn,
 .book__edit-btn,
-.book__status-btn{
+.book__status-btn,
+.book__read-btn{
     cursor: pointer;
 
     width: 40px;
@@ -50,9 +51,14 @@
     background: url(../../assets/icons/book-closed-with-black-cover.png) no-repeat center;
 }
 
+.book__read-btn{
+    background: url(../../assets/icons/right-arrow.png) no-repeat center;
+}
+
 .book__delete-btn:hover,
 .book__edit-btn:hover,
-.book__status-btn:hover{
+.book__status-btn:hover,
+.book__read-btn:hover{
     background-color: #ddd;
 }
 

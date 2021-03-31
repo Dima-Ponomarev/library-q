@@ -123,17 +123,24 @@ class Book {
             deleteBookHandler(this);
         })
 
-        //append cntrol element to control panel
+        const readBtn = document.createElement('button');
+        readBtn.className = 'book__read-btn';
+        readBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            openNewBookHandler(this);
+        })
+
+        //append control element to control panel
         controlBtns.appendChild(statusBtn);
         controlBtns.appendChild(editBtn);
         controlBtns.appendChild(deleteBtn);
+        controlBtns.appendChild(readBtn)
 
 
         listItem.appendChild(titleWrap);
         listItem.appendChild(controlBtns)
 
-        listItem.addEventListener('click', (e) => {
-            openNewBookHandler(this);
+        listItem.addEventListener('click', e => {
         })
 
         root.appendChild(listItem);
