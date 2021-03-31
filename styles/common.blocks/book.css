@@ -1,5 +1,4 @@
 .book{
-    height: 50px;
 
     display: flex;
     align-items: center;
@@ -7,6 +6,7 @@
 
     cursor: pointer;
     border: 1px solid white;
+    padding: 1rem 0;
 }
 
 .book__title-wrap{
@@ -46,13 +46,8 @@
     background: url(../../assets/icons/open-book.png) no-repeat center;
 }
 
-.book__status-btn:hover,
 .book__status-btn--read{
     background: url(../../assets/icons/book-closed-with-black-cover.png) no-repeat center;
-}
-
-.book__status-btn--read:hover{
-    background: url(../../assets/icons/open-book.png) no-repeat center;
 }
 
 .book__delete-btn:hover,
@@ -77,4 +72,20 @@
 .book--active{
     background: #73ab84;
     color: white;
+}
+
+@media screen and (max-width: 1200px){
+
+    .book{
+        flex-direction: column;
+    }
+
+    .book__title-wrap{
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 }
