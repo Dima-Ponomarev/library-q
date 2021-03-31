@@ -18,16 +18,31 @@
         <section class="side-controls">
             <div class="side-controls__inner">
                 <div class="side-controls__books">
-                    <div class="side-controls__list-title-wrap">
-                        <p class="side-controls__list-title">My books</p>
-                        <div class="side-controls__sorting">
-                            <p class="side-controls__sorting-text">Sort by:</p>
-                            <button class="side-controls__sort-status" id="sort-main-status"></button>
-                            <button class="side-controls__sort-time" id="sort-main-time"></button>
+                    <div class="side-controls__favorite-list">
+                        <div class="side-controls__list-title-wrap">
+                            <p class="side-controls__list-title">Favorite books</p>
+                            <div class="side-controls__sorting">
+                                <p class="side-controls__sorting-text">Sort by:</p>
+                                <button class="side-controls__sort-status" id="sort-favorite-status"></button>
+                                <button class="side-controls__sort-time" id="sort-favorite-time"></button>
+                            </div>
                         </div>
+                        <ul class="list" id="favorite-list">
+                            
+                        </ul>
                     </div>
-                    <ul class="main-list">
-                    </ul>
+                    <div class="side-controls__main-list">
+                        <div class="side-controls__list-title-wrap">
+                            <p class="side-controls__list-title">My books</p>
+                            <div class="side-controls__sorting">
+                                <p class="side-controls__sorting-text">Sort by:</p>
+                                <button class="side-controls__sort-status" id="sort-main-status"></button>
+                                <button class="side-controls__sort-time" id="sort-main-time"></button>
+                            </div>
+                        </div>
+                        <ul class="list" id="main-list">
+                        </ul>
+                    </div>
                 </div>
                 <div class="side-controls__forms-wrap">
                     <ul class="side-controls__switch-forms">

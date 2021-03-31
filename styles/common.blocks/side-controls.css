@@ -49,6 +49,10 @@
 
 }
 
+.side-controls__favorite-list{
+    margin-bottom: 2rem;
+}
+
 .side-controls__sorting{
     display: flex;
     align-items: center;
