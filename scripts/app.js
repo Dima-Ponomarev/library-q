@@ -4,17 +4,28 @@ const writeSwitchBtn = document.querySelector('.side-controls__btn-write');
 const formWrap = document.querySelectorAll('.side-controls__form-wrap');
 const writeForm = document.getElementById('write-form');
 const uploadForm = document.getElementById('upload-form');
-const writeBtn = document.querySelector('.side-controls__add-written-book')
-const mainList = document.querySelector('.main-list')
+const writeBtn = document.querySelector('.side-controls__add-written-book');
+const mainList = document.getElementById('main-list');
+const favoriteList = document.getElementById('favorite-list');
+const sortMainStatusBtn = document.getElementById('sort-main-status');
+const sortMainTimeBtn = document.getElementById('sort-main-time');
+const sortFavoriteStatusBtn = document.getElementById('sort-favorite-status');
+const sortFavoriteTimeBtn = document.getElementById('sort-favorite-time');
 let books = [];
 
 class Book {
-    constructor(title, text, statusRead, mainRoot, number) {
+    constructor(title, text, statusRead, mainRoot, favoriteRoot, number, isFavorite = false) {
         this.title = title;
         this.text = text;
         this.statusRead = statusRead;
         this.number = number;
-        this.renderToList(mainRoot);
+        this.isFavorite = isFavorite;
+        if (this.isFavorite){
+            this.renderToList(favoriteRoot);
+        } else {
+            this.renderToList(mainRoot);
+        }
+
 
     }
 
@@ -23,6 +34,7 @@ class Book {
             title: this.title,
             text: this.text,
             statusRead: this.statusRead,
+            isFavorite: this.isFavorite,
         }
     }
 
@@ -39,29 +51,33 @@ class Book {
     }
 
     toggleStatus() {
-        const renderedElementStatus = document.querySelector(`[data-number='${this.number}']`).childNodes[0].childNodes[1];
+        const renderedListElement = document.querySelector(`[data-number='${this.number}']`)
+        const renderedElementStatus = renderedListElement.childNodes[0].childNodes[1];
         const renderedElementStatusBtn = document.querySelector(`[data-number='${this.number}']`).childNodes[1].childNodes[0];
         if (this.statusRead) {
             renderedElementStatus.classList.remove('book__status--read');
             renderedElementStatus.innerText = 'Book is not read';
             renderedElementStatusBtn.classList.remove('book__status-btn--read');
+            renderedListElement.dataset.status = false;
             this.statusRead = false;
         } else {
             renderedElementStatus.classList.add('book__status--read');
             renderedElementStatus.innerText = 'Book is read';
             renderedElementStatusBtn.classList.add('book__status-btn--read');
+            renderedListElement.dataset.status = true;
             this.statusRead = true;
         }
     }
 
     renderToList(root) {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
         listItem.className = `${root.className}__item book`;
-        listItem.dataset.number = this.number
+        listItem.dataset.number = this.number;
+        listItem.dataset.status = this.statusRead;
 
         //title wrap
         const titleWrap = document.createElement('div');
-        titleWrap.className = 'book__title-wrap'
+        titleWrap.className = 'book__title-wrap';
 
         //book title element
         const bookTitle = document.createElement('p');
@@ -73,7 +89,7 @@ class Book {
         }
 
         const bookStatus = document.createElement('p');
-        bookStatus.className = 'book__status'
+        bookStatus.className = 'book__status';
         if (this.statusRead) {
             bookStatus.classList.add('book__status--read');
             bookStatus.innerText = 'Book is read';
@@ -92,9 +108,15 @@ class Book {
         //toggle book status btn
         const statusBtn = document.createElement('button');
         statusBtn.className = 'book__status-btn';
+        if (this.statusRead) {
+            statusBtn.classList.add('book__status-btn--read');
+        }
         statusBtn.addEventListener('click', e => {
             e.stopPropagation();
             toggleStatusHandler(this);
+        })
+        statusBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
         })
 
         //edit btn
@@ -103,6 +125,9 @@ class Book {
         editBtn.addEventListener('click', e => {
             e.stopPropagation();
             renderEditPopup(this);
+        })
+        editBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
         })
 
 
@@ -113,25 +138,118 @@ class Book {
             e.stopPropagation();
             deleteBookHandler(this);
         })
+        deleteBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        })
 
-        //append cntrol element to control panel
+        const readBtn = document.createElement('button');
+        readBtn.className = 'book__read-btn';
+        readBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            openNewBookHandler(this);
+        })
+        readBtn.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        })
+
+        //append control element to control panel
         controlBtns.appendChild(statusBtn);
         controlBtns.appendChild(editBtn);
         controlBtns.appendChild(deleteBtn);
+        controlBtns.appendChild(readBtn);
 
 
         listItem.appendChild(titleWrap);
-        listItem.appendChild(controlBtns)
+        listItem.appendChild(controlBtns);
 
-        listItem.addEventListener('click', (e) => {
-            openNewBookHandler(this);
+        //----------DRAG N DROP EVENTS-----------
+
+        listItem.addEventListener('mousedown', e => {
+            const coords = getCoordinates(listItem);
+            listItem.children[1].style.pointerEvents = 'none';
+
+            const shiftX = e.clientX - coords.left;
+            const shiftY = e.clientY - coords.top;
+            let currentDroppable = null;
+
+            const moveAt = (e) => {
+                listItem.style.left = e.pageX - shiftX + 'px';
+                listItem.style.top = e.pageY - shiftY + 'px';
+            }
+
+            const onMouseMove = (e) => {
+                moveAt(e);
+            }
+
+            listItem.style.position = 'absolute';
+            document.body.appendChild(listItem);
+            moveAt(e);
+            listItem.style.zIndex = 1000;
+
+            document.addEventListener('mousemove', onMouseMove)
+
+            listItem.onmouseup = (e) => {
+                let currentList;
+                if (this.isFavorite){
+                    currentList = favoriteList;
+                } else {
+                    currentList = mainList;
+                }
+                listItem.hidden = true;
+                let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                listItem.hidden = false;
+
+                const closestList = elemBelow.closest('.list');
+
+                if (closestList && currentList != closestList){
+                    const rootList = closestList.querySelector('.list__inner');
+                    rootList.appendChild(listItem);
+                    if (this.isFavorite){
+                        this.isFavorite = false;
+                    } else {
+                        this.isFavorite = true;
+                    }
+                    for (let i = 0; i < books.length; i++){
+                        if (books[i] === this){
+                            books[i] = this;
+                            break;
+                        }
+                    }
+                    updateLocal(books);
+                } else {
+                    currentList.appendChild(listItem);
+                }
+ 
+                document.removeEventListener('mousemove', onMouseMove)
+                
+                e.target.children[1].style.pointerEvents = 'auto';
+                e.target.style.zIndex = 1;
+                e.target.style.position = 'static';
+
+                listItem.onmouseup = null;
+            }
         })
+
+        listItem.ondragstart = () => {
+            return false;
+        }
 
         root.appendChild(listItem);
     }
-
 }
 
+//---------------DRAG N DROP SUPPORT FUNCTIONS----------------
+const moveAt = e => {
+    e.target.style.left = e.pageX;
+}
+
+const getCoordinates = el => {
+    const box = el.getBoundingClientRect();
+    return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+    }
+}
 //---------------EDIT BOOK--------------------
 
 const renderEditPopup = (book) => {
@@ -214,6 +332,48 @@ const openNewBookHandler = (book) => {
 
 }
 
+//----------------SORT BOOK LIST HANDLERS-----------------------
+
+const sortStatusHandler = (bookList, list, favorite) => {
+    list.innerHTML = ''
+    const unreadList = [];
+    for (book of bookList){
+        if (book.isFavorite === favorite){
+            if (book.statusRead === true){
+                book.renderToList(list);
+            } else {
+                unreadList.push(book);
+            }
+        }
+    }
+    for (book of unreadList){
+        book.renderToList(list)
+    }
+
+}
+
+const sortTimeHandler =  (bookList, list, favorite) => {
+    list.innerHTML = ''
+    let sortedBooks = [];
+    for (book of bookList){
+        if (book.isFavorite === favorite){
+            sortedBooks.push(book)
+        }
+    }
+    for (let i = 0; i < sortedBooks.length; i++){
+        for (let j = i + 1; j < sortedBooks.length; j++){
+            if (sortedBooks[i].number > sortedBooks[j].number){
+                const temp = sortedBooks[i];
+                sortedBooks[i] = sortedBooks[j];
+                sortedBooks[j] = temp;
+            }
+        }
+    }
+    for (book of sortedBooks){
+        book.renderToList(list)
+    }
+}
+
 //---------------LOCAL STORAGE HANDLING-----------------
 
 const updateLocal = (books) => {
@@ -236,7 +396,7 @@ const getLocal = () => {
     if (localStorage.getItem('books') !== null) {
         const bookObjects = JSON.parse(localStorage.getItem('books'));
         bookObjects.forEach((obj, index) => {
-            loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList, index))
+            loadedBooks.push(new Book(obj.title, obj.text, obj.statusRead, mainList, favoriteList, index, obj.isFavorite))
         })
     }
     return loadedBooks;
@@ -244,7 +404,7 @@ const getLocal = () => {
 
 //--------------------------------------------------------
 
-//---------------------SWITCH BETWEEN 2 FORMS--------------------------
+//---------------------SWITCH BETWEEN 2 FORMS HANDLERS--------------------------
 
 const uploadSwitchHandler = (e) => {
     if (!e.target.classList.contains('btn--active')) {
@@ -268,13 +428,19 @@ writeSwitchBtn.addEventListener('click', writeSwitchHandler);
 
 //------------------------------------------------------------
 
+//----------------------SORT EVENTS----------------------------
+sortMainStatusBtn.addEventListener('click', () => sortStatusHandler(books, mainList, false));
+sortMainTimeBtn.addEventListener('click', () => sortTimeHandler(books, mainList, false));
+sortFavoriteStatusBtn.addEventListener('click', () => sortStatusHandler(books, favoriteList, true))
+sortFavoriteTimeBtn.addEventListener('click', () => sortTimeHandler(books, favoriteList, true))
+
 //-------------------ADD NEW BOOK-----------------------------
 
 writeBtn.addEventListener('click', (e) => {
     e.preventDefault();
     const title = document.getElementById('w-title');
     const text = document.getElementById('text');
-    const newBook = new Book(title.value, text.value, false, mainList, books.length);
+    const newBook = new Book(title.value, text.value, false, mainList, favoriteList, books.length);
     books.push(newBook);
     saveToLocal(newBook);
     title.value = '';
@@ -293,7 +459,7 @@ uploadForm.addEventListener('submit', function (e) {
     }).then(function (response) {
         return response.json();
     }).then(function (json) {
-        const newBook = new Book(title.value, json.text, false, mainList, books.length);
+        const newBook = new Book(title.value, json.text, false, mainList, favoriteList, books.length);
         books.push(newBook);
         saveToLocal(newBook);
         console.log(books);
@@ -310,3 +476,4 @@ uploadForm.addEventListener('submit', function (e) {
 
 books = getLocal();
 
+console.log(books)

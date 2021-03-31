@@ -38,10 +38,49 @@
     margin-top: 1.5rem;
 }
 
+.side-controls__list-title-wrap{
+    background: #ddd;
+}
+
 .side-controls__list-title{
     font-size: 2rem;
     font-weight: 700;
     text-align: center;
 
-    background: #ddd;
+}
+
+.side-controls__favorite-list{
+    margin-bottom: 2rem;
+}
+
+.side-controls__sorting{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding-bottom: 0.5rem;
+}
+
+.side-controls__sorting-text{
+    font-size: 1.4rem;
+    padding-right: 1rem;
+}
+
+.side-controls__sort-status,
+.side-controls__sort-time{
+    margin-right: 0.5rem;
+
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.side-controls__sort-status{
+    background: url(../../assets/icons/project.png) no-repeat center;
+}
+
+.side-controls__sort-time{
+    background: url(../../assets/icons/clock.png) no-repeat center;
 }
