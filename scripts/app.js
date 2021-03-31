@@ -203,19 +203,23 @@ class Book {
 
                 if (closestList && currentList != closestList){
                     const rootList = closestList.querySelector('.list__inner');
-                    rootList.appendChild(listItem);
-                    if (this.isFavorite){
-                        this.isFavorite = false;
-                    } else {
-                        this.isFavorite = true;
-                    }
-                    for (let i = 0; i < books.length; i++){
-                        if (books[i] === this){
-                            books[i] = this;
-                            break;
+                    if (currentList !== rootList){
+                        rootList.appendChild(listItem);
+                        if (this.isFavorite){
+                            this.isFavorite = false;
+                        } else {
+                            this.isFavorite = true;
                         }
+                        for (let i = 0; i < books.length; i++){
+                            if (books[i] === this){
+                                books[i] = this;
+                                break;
+                            }
+                        }
+                        updateLocal(books);
+                    } else {
+                        currentList.appendChild(listItem);
                     }
-                    updateLocal(books);
                 } else {
                     currentList.appendChild(listItem);
                 }
@@ -239,9 +243,6 @@ class Book {
 }
 
 //---------------DRAG N DROP SUPPORT FUNCTIONS----------------
-const moveAt = e => {
-    e.target.style.left = e.pageX;
-}
 
 const getCoordinates = el => {
     const box = el.getBoundingClientRect();
@@ -257,7 +258,7 @@ const renderEditPopup = (book) => {
     const popupContainer = document.createElement('div');
     popupContainer.className = 'popup__container';
     popupContainer.innerHTML =
-        `
+    `
     <label class="popup__label" for="p-title">Book title:</label>
     <input type="text" name="title" id="p-title" class="popup__title-input" value="${book.title}">
     <textarea name="book-text" cols="50" rows="10" id="p-text" class="popup__book-text">${book.text}</textarea>
@@ -282,7 +283,7 @@ const saveBtnHandler = (book) => {
     books.forEach(item => {
         if (book === item) {
             item.setNewTitle(title.value);
-            item.text = text.value
+            item.text = text.value;
         }
     });
     updateLocal(books);
@@ -475,5 +476,3 @@ uploadForm.addEventListener('submit', function (e) {
 //Load books from local storage
 
 books = getLocal();
-
-console.log(books)
