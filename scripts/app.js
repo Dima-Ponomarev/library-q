@@ -186,8 +186,8 @@ class Book {
             hoverBlock.innerText = 'Drop here';
 
             const moveAt = (e) => {
-                listItem.style.left = e.pageX - shiftX + 'px';
-                listItem.style.top = e.pageY - shiftY + 'px';
+                listItem.style.left = e.clientX - shiftX + 'px';
+                listItem.style.top = e.clientY - shiftY + 'px';
             }
 
             const onMouseMove = (e) => {
