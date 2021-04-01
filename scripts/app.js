@@ -170,7 +170,6 @@ class Book {
 
             const shiftX = e.clientX - coords.left;
             const shiftY = e.clientY - coords.top;
-            let currentDroppable = null;
 
             const moveAt = (e) => {
                 listItem.style.left = e.pageX - shiftX + 'px';
@@ -181,6 +180,18 @@ class Book {
                 moveAt(e);
             }
 
+            let currentList;
+            if (this.isFavorite){
+                currentList = favoriteList;
+            } else {
+                currentList = mainList;
+            }
+
+            const blockHeight = listItem.getBoundingClientRect().height;
+            const tempNode = document.createElement('div');
+            tempNode.style.height = blockHeight + 'px';
+            currentList.insertBefore(tempNode, listItem);
+            
             listItem.style.position = 'absolute';
             document.body.appendChild(listItem);
             moveAt(e);
@@ -189,16 +200,12 @@ class Book {
             document.addEventListener('mousemove', onMouseMove)
 
             listItem.onmouseup = (e) => {
-                let currentList;
-                if (this.isFavorite){
-                    currentList = favoriteList;
-                } else {
-                    currentList = mainList;
-                }
+                
                 listItem.hidden = true;
                 let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
                 listItem.hidden = false;
 
+                tempNode.remove();
                 const closestList = elemBelow.closest('.list');
 
                 if (closestList && currentList != closestList){
@@ -463,7 +470,6 @@ uploadForm.addEventListener('submit', function (e) {
         const newBook = new Book(title.value, json.text, false, mainList, favoriteList, books.length);
         books.push(newBook);
         saveToLocal(newBook);
-        console.log(books);
         title.value = '';
     }).catch(function (error) {
         console.error(error)
