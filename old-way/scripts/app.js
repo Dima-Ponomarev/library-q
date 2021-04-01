@@ -171,20 +171,6 @@ class Book {
             const shiftX = e.clientX - coords.left;
             const shiftY = e.clientY - coords.top;
 
-            let hoveringListContainer;
-            let currentList;
-            if (this.isFavorite){
-                hoveringListContainer = document.querySelectorAll('.list')[0];
-                currentList = favoriteList;
-            } else {
-                hoveringListContainer = document.querySelectorAll('.list')[1];
-                currentList = mainList;
-            }
-
-            const hoverBlock = document.createElement('div');
-            hoverBlock.className = 'hover';
-            hoverBlock.innerText = 'Drop here';
-
             const moveAt = (e) => {
                 listItem.style.left = e.pageX - shiftX + 'px';
                 listItem.style.top = e.pageY - shiftY + 'px';
@@ -192,21 +178,13 @@ class Book {
 
             const onMouseMove = (e) => {
                 moveAt(e);
-                listItem.hidden = true;
-                let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-                listItem.hidden = false;
-                let closestListContainer = elemBelow.closest('.list');
+            }
 
-                if (closestListContainer){
-                    if (closestListContainer !== hoveringListContainer){
-                        closestListContainer.appendChild(hoverBlock);
-                        hoveringListContainer = closestListContainer
-                    }
-                } else {
-                    hoverBlock.remove();
-                    hoveringListContainer = null;
-                }
-
+            let currentList;
+            if (this.isFavorite){
+                currentList = favoriteList;
+            } else {
+                currentList = mainList;
             }
 
             const blockHeight = listItem.getBoundingClientRect().height;
@@ -228,8 +206,6 @@ class Book {
                 listItem.hidden = false;
 
                 tempNode.remove();
-                hoverBlock.remove();
-
                 const closestList = elemBelow.closest('.list');
 
                 if (closestList && currentList != closestList){
